@@ -1,0 +1,391 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f1faee;
+    color: #333;
+    line-height: 1.6;
+    background-image: url('https://www.transparenttextures.com/patterns/little-pluses.png');
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    background-color: #d8f3dc;
+    border-radius: 15px;
+    border: 4px solid #40916c;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 3rem;
+    color: #1b4332;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.8rem;
+    color: #2d6a4f;
+    margin-bottom: 15px;
+}
+
+/* Map styles */
+.map-container {
+    margin-bottom: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 4px solid #52b788;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+}
+
+.map-instructions {
+    background-color: rgba(216, 243, 220, 0.9);
+    padding: 10px 15px;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    z-index: 1000;
+    font-size: 0.9rem;
+    max-width: 250px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid #2d6a4f;
+}
+
+/* Przycisk lokalizacji */
+.locate-button {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.locate-button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+/* QR Scanner styles */
+.scanner-container {
+    background-color: #95d5b2;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    border: 4px solid #40916c;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#qr-reader {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+}
+
+#qr-reader video {
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+#qr-reader-results {
+    margin-bottom: 20px;
+    font-weight: bold;
+    min-height: 50px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.button {
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+    background-color: #1b4332;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
+/* Info container styles */
+.info-container {
+    background-color: #74c69d;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 4px solid #40916c;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dwarf-info h2 {
+    color: #1b4332;
+    text-align: center;
+}
+
+#found-dwarfs {
+    list-style-type: none;
+    margin-top: 15px;
+}
+
+#found-dwarfs li {
+    background-color: #b7e4c7;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+#found-dwarfs li {
+    background-color: #b7e4c7;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+#found-dwarfs li.found {
+    background-color: #d8f3dc;
+    border-left: 5px solid #2d6a4f;
+    color: #1b4332;
+}
+
+/* Style for dwarf name links in the list */
+.dwarf-name-link {
+    color: #1b4332;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dwarf-name-link:hover {
+    color: #40916c;
+    text-decoration: underline;
+}
+
+.dwarf-name-link::before {
+    content: "🏠 ";
+}
+
+/* Ensure the dwarf-link (Zobacz szczegóły) styling still works */
+.dwarf-link {
+    display: inline-block;
+    background-color: #2d6a4f;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 15px;
+    text-decoration: none;
+    margin-left: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.dwarf-link:hover {
+    background-color: #1b4332;
+    transform: scale(1.05);
+}
+
+/* Styl dla komunikatu o dodaniu do ekranu głównego */
+.add-to-home-screen {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(216, 243, 220, 0.95);
+    padding: 10px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    text-align: center;
+    border-top: 3px solid #40916c;
+}
+
+.prompt-content {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.close-prompt {
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.icon {
+    font-size: 1.2em;
+    margin: 0 3px;
+}
+
+/* Style for popup links */
+.popup-link {
+    display: inline-block;
+    background-color: #2d6a4f;
+    color: white !important;
+    padding: 5px 10px;
+    border-radius: 15px;
+    text-decoration: none;
+    margin-top: 8px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.popup-link:hover {
+    background-color: #1b4332;
+    transform: scale(1.05);
+}
+
+/* Style for success message links */
+.success-link {
+    display: inline-block;
+    background-color: #2d6a4f;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.success-link:hover {
+    background-color: #1b4332;
+    transform: scale(1.05);
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1.1rem;
+    color: #6a994e;
+    font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #map {
+        height: 400px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Dodatkowe style dla telefonów komórkowych */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        padding: 15px 0;
+        margin-bottom: 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    #map {
+        height: 350px;
+    }
+    
+    .map-instructions {
+        font-size: 0.8rem;
+        max-width: 200px;
+        bottom: 40px;
+    }
+    
+    .scanner-container {
+        padding: 15px;
+    }
+    
+    #qr-reader {
+        height: auto;
+    }
+    
+    /* Popraw rozmiar przycisków dla łatwiejszego dotykania na telefonach */
+    .button {
+        padding: 15px 30px;
+        font-size: 1.3rem;
+    }
+    
+    .locate-button {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 22px !important;
+    }
+    
+    /* Zapobieganie gumowemu przewijaniu na iOS */
+    html, body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
