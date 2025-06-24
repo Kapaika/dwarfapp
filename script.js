@@ -3,7 +3,7 @@ const dwarfData = [
     {
         id: 1,
         name: "Mędrek",
-        location: [50.3097, 19.5496], // Pustynia Błędowska - punkt widokowy
+        location: [50.32411, 19.62878], // Dom nr 1 - 50°19'26.8"N 19°37'43.6"E
         found: false,
         description: "Przywódca siedmiu krasnoludków. Bardzo mądry i nosi okulary.",
         qrCode: "dwarf-doc-1234"
@@ -11,7 +11,7 @@ const dwarfData = [
     {
         id: 2,
         name: "Gburek",
-        location: [50.3263, 19.5572], // Czubatka - skała w Kluczach
+        location: [50.32239, 19.62975], // Dom nr 2 - 50°19'20.6"N 19°37'47.1"E
         found: false,
         description: "Zawsze w złym humorze, ale ma złote serce.",
         qrCode: "dwarf-grumpy-5678"
@@ -19,7 +19,7 @@ const dwarfData = [
     {
         id: 3,
         name: "Wesołek",
-        location: [50.3416, 19.5183], // Zamek w Rabsztynie
+        location: [50.30772, 19.61908], // Dom nr 3 - 50°18'27.8"N 19°37'08.7"E
         found: false,
         description: "Zawsze uśmiechnięty i wprowadza radość wszystkim wokół.",
         qrCode: "dwarf-happy-9012"
@@ -27,7 +27,7 @@ const dwarfData = [
     {
         id: 4,
         name: "Śpioszek",
-        location: [50.2962, 19.5708], // Dolina Wodąca
+        location: [50.30678, 19.61650], // Dom nr 4 - 50°18'24.4"N 19°36'59.4"E
         found: false,
         description: "Może zasnąć wszędzie i o każdej porze.",
         qrCode: "dwarf-sleepy-3456"
@@ -35,7 +35,7 @@ const dwarfData = [
     {
         id: 5,
         name: "Nieśmiałek",
-        location: [50.3170, 19.6013], // Rezerwat Pazurek
+        location: [50.33558, 19.62711], // Dom nr 5 - 50°20'08.1"N 19°37'37.6"E
         found: false,
         description: "Nieśmiały i łatwo się zawstydza, ma różowe policzki.",
         qrCode: "dwarf-bashful-7890"
@@ -43,19 +43,11 @@ const dwarfData = [
     {
         id: 6,
         name: "Apsik",
-        location: [50.3280, 19.5797], // Jar Południowy w Kluczach
+        location: [50.32853, 19.62428], // Dom nr 6 - 50°19'42.7"N 19°37'27.4"E
         found: false,
         description: "Ma okropne alergie i często kicha.",
         qrCode: "dwarf-sneezy-1357"
     },
-    {
-        id: 7,
-        name: "Gapcio",
-        location: [50.3195, 19.5611], // Źródełko pod Jaskinią Biśnik
-        found: false,
-        description: "Najmłodszy krasnoludek, który nie mówi i jest trochę niezdarny.",
-        qrCode: "dwarf-dopey-2468"
-    }
 ];
 
 // Save the dwarf data to local storage
