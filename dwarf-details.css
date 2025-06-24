@@ -1,4 +1,12 @@
-/* Styles for dwarf detail pages */
+/* Font declarations */
+@font-face {
+    font-family: 'OldNewspaperTypes';
+    src: url('../assets/fonts/Oldnewspapertypes-449D.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Styles for dwarf detail pages - Old newspaper/pirate map theme */
 
 .dwarf-navigation {
     margin-bottom: 20px;
@@ -6,47 +14,100 @@
 
 .back-button {
     display: inline-block;
-    background-color: #2d6a4f;
-    color: white;
+    background-color: #2e1f00; /* Dark brown */
+    color: #e8d9b5; /* Light beige text */
     padding: 10px 20px;
-    border-radius: 50px;
+    border-radius: 0px; /* Square corners */
     text-decoration: none;
-    font-weight: bold;
+    font-weight: normal;
+    font-family: 'OldNewspaperTypes', serif;
     transition: all 0.3s ease;
+    border: 2px solid #000000;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1rem;
 }
 
 .back-button:hover {
-    background-color: #1b4332;
+    background-color: #000000;
     transform: translateX(-5px);
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3);
 }
 
 .dwarf-details-container {
-    background-color: #95d5b2;
-    border-radius: 15px;
+    background-color: #e8d9b5; /* Light beige */
+    border-radius: 0px;
     padding: 25px;
     margin-bottom: 30px;
-    border: 4px solid #40916c;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 3px double #2e1f00; /* Double border for vintage feel */
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+    position: relative;
+    background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+}
+
+/* Add decorative corner to dwarf container */
+.dwarf-details-container:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-left: 1px solid #2e1f00;
+    border-bottom: 1px solid #2e1f00;
 }
 
 .dwarf-story {
-    background-color: #d8f3dc;
+    background-color: #f2e7d0; /* Slightly lighter beige */
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0px; /* Square corners */
     margin-bottom: 25px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #2e1f00;
 }
 
 .dwarf-story h2 {
-    color: #1b4332;
+    color: #000000; /* Black text */
     margin-bottom: 15px;
     text-align: center;
+    border-bottom: 2px solid #2e1f00;
+    padding-bottom: 10px;
+    letter-spacing: 2px;
+    font-family: 'OldNewspaperTypes', serif;
+    font-size: 2.2rem;
+    font-weight: normal;
+    position: relative;
+}
+
+/* Add decorative elements to story heading */
+.dwarf-story h2:before,
+.dwarf-story h2:after {
+    content: "★";
+    font-size: 1rem;
+    padding: 0 10px;
+    color: #2e1f00;
+    vertical-align: middle;
 }
 
 .dwarf-story p {
     margin-bottom: 15px;
     line-height: 1.8;
     text-align: justify;
+    font-family: 'OldNewspaperTypes', Georgia, serif;
+    color: #000000; /* Black text */
+    font-size: 1.05rem;
+    position: relative;
+    text-indent: 20px;
+}
+
+/* First letter styling for story paragraphs */
+.dwarf-story p:first-of-type::first-letter {
+    font-size: 3em;
+    font-family: 'OldNewspaperTypes', serif;
+    float: left;
+    line-height: 0.8;
+    margin-right: 10px;
 }
 
 .dwarf-media {
@@ -58,16 +119,32 @@
 
 .dwarf-audio {
     flex: 1 1 300px;
-    background-color: #d8f3dc;
+    background-color: #f2e7d0; /* Slightly lighter beige */
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0px; /* Square corners */
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #2e1f00;
+    position: relative;
+}
+
+/* Add decorative element to audio section */
+.dwarf-audio:before {
+    content: "♩♪";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    color: #2e1f00;
+    opacity: 0.5;
 }
 
 .dwarf-audio h3 {
-    color: #1b4332;
+    color: #000000; /* Black text */
     margin-bottom: 15px;
-    font-family: 'Bubblegum Sans', cursive;
+    font-family: 'OldNewspaperTypes', serif;
+    border-bottom: 1px solid #2e1f00;
+    padding-bottom: 5px;
+    font-weight: normal;
 }
 
 .dwarf-audio audio {
@@ -76,22 +153,26 @@
 
 .dwarf-gallery {
     flex: 2 1 400px;
-    background-color: #d8f3dc;
+    background-color: #f2e7d0; /* Slightly lighter beige */
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0px; /* Square corners */
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #2e1f00;
 }
 
 .dwarf-gallery h3 {
-    color: #1b4332;
+    color: #000000; /* Black text */
     margin-bottom: 15px;
-    font-family: 'Bubblegum Sans', cursive;
+    font-family: 'OldNewspaperTypes', serif;
+    border-bottom: 1px solid #2e1f00;
+    padding-bottom: 5px;
+    font-weight: normal;
 }
 
 .gallery-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     justify-content: center;
 }
 
@@ -99,10 +180,12 @@
     flex: 1 1 200px;
     max-width: calc(33% - 10px);
     height: 150px;
-    border-radius: 10px;
+    border-radius: 0px; /* Square corners */
     overflow: hidden;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
+    border: 2px solid #2e1f00;
+    filter: sepia(20%); /* Add slight sepia for vintage feel */
 }
 
 .gallery-item:hover {
@@ -159,31 +242,45 @@
 
 /* Not found notice styling */
 .not-found-notice {
-    background-color: #ffffd1;
-    border: 2px dashed #ff9800;
-    border-radius: 10px;
+    background-color: #f7e9c3; /* Light parchment color */
+    border: 2px dashed #2e1f00;
+    border-radius: 0px; /* Square corners */
     padding: 15px;
     margin-bottom: 20px;
     text-align: center;
     animation: pulse 2s infinite;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/* Add decorative warning symbol */
+.not-found-notice:before {
+    content: "⚠";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 18px;
+    color: #2e1f00;
 }
 
 .not-found-notice p {
     margin: 5px 0;
-    font-weight: bold;
+    font-weight: normal;
+    color: #2e1f00;
+    font-family: 'OldNewspaperTypes', Georgia, serif;
 }
 
 .not-found-notice p:first-child {
     font-size: 1.2rem;
-    color: #e76f51;
+    color: #2e1f00;
 }
 
 @keyframes pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.5);
+        box-shadow: 3px 3px 0px rgba(46, 31, 0, 0.2);
     }
     70% {
-        box-shadow: 0 0 0 10px rgba(255, 152, 0, 0);
+        box-shadow: 3px 3px 8px rgba(46, 31, 0, 0.5);
     }
     100% {
         box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);

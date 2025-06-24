@@ -6,14 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Poszukiwanie Domów Krasnoludków</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-    <meta name="theme-color" content="#6a994e">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+    <meta name="theme-color" content="#e8d9b5">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Using local font from assets/fonts/ -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/html5-qrcode" defer></script>
@@ -23,7 +21,7 @@
     <div class="container">
         <header>
             <h1>Poszukiwanie Domów Krasnoludków</h1>
-            <p>Znajdź ukryte domy krasnoludków i zeskanuj ich kody QR, aby zebrać magiczne skarby!</p>
+            <p>Znajdź ukryte domy siedmiu krasnoludków i wprowadź ich magiczne kody, aby odkryć ich historie!</p>
         </header>
         
         <main>
@@ -33,17 +31,17 @@
             </div>
             
             <div class="scanner-container">
-                <h2>Zeskanuj Kod QR</h2>
+                <h2>Wpisz magiczny kod</h2>
                 <div id="qr-reader"></div>
                 <div id="qr-reader-results"></div>
-                <button id="start-scanner" class="button">Włącz Skaner</button>
+                <button id="start-scanner" class="button">Zatwierdz</button>
             </div>
 
             <div class="info-container">
                 <div class="dwarf-info">
-                    <h2>Znalezione Domy Krasnoludków: <span id="found-count">0</span>/<span id="total-count">7</span></h2>
+                    <h2>Domy Krasnoludków: <span id="found-count">0</span>/<span id="total-count">7</span> Znalezionych</h2>
                     <ul id="found-dwarfs">
-                        <!-- Lista znalezionych krasnoludków będzie tutaj -->
+                        <!-- Lista wszystkich domów krasnoludków będzie tutaj -->
                     </ul>
                 </div>
             </div>

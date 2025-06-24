@@ -83,7 +83,13 @@ function updateDwarfFoundDisplay() {
     foundCount.textContent = found;
     totalCount.textContent = dwarfData.length;
     
-    // Populate the list
+    // Update the header text to show we're displaying all dwarf houses
+    const dwarfInfoHeader = document.querySelector('.dwarf-info h2');
+    if (dwarfInfoHeader) {
+        dwarfInfoHeader.textContent = `Domy Krasnoludków: ${found}/${dwarfData.length} Znalezionych`;
+    }
+    
+    // Populate the list - now showing ALL dwarfs, not just found ones
     dwarfData.forEach(dwarf => {
         const listItem = document.createElement('li');
         
@@ -92,6 +98,19 @@ function updateDwarfFoundDisplay() {
         dwarfNameLink.href = getDwarfPageUrl(dwarf);
         dwarfNameLink.className = 'dwarf-name-link';
         dwarfNameLink.textContent = dwarf.name;
+        
+        if (!dwarf.found) {
+            // Add blur effect class to not-found dwarfs
+            listItem.classList.add('not-found');
+            dwarfNameLink.classList.add('blurred');
+        }
+        
+        // Make the entire list item clickable
+        const fullItemLink = document.createElement('a');
+        fullItemLink.href = getDwarfPageUrl(dwarf);
+        fullItemLink.className = 'list-item-link';
+        fullItemLink.setAttribute('aria-label', `Przejdź do strony ${dwarf.name}a`);
+        listItem.appendChild(fullItemLink);
         
         listItem.appendChild(dwarfNameLink);
         
@@ -106,10 +125,20 @@ function updateDwarfFoundDisplay() {
             
             listItem.appendChild(detailsLink);
         } else {
+            // Add styling but keep it clickable
             listItem.appendChild(document.createTextNode(' - Jeszcze nie znaleziony'));
         }
         
+        // Add the list item to the list
         foundDwarfsList.appendChild(listItem);
+        
+        // Add click handler to the list item (for better mobile experience)
+        listItem.addEventListener('click', function(e) {
+            // Only navigate if the click wasn't on a specific link
+            if (!e.target.closest('a')) {
+                window.location.href = getDwarfPageUrl(dwarf);
+            }
+        });
     });
 }
 
@@ -120,18 +149,23 @@ let userLocationMarker;
 let userLocationCircle;
 
 function initMap() {
-    // Create the map centered at the midpoint of all dwarf houses
-    map = L.map('map').setView([50.3180, 19.5640], 14);
+    // Calculate the center of all dwarf houses
+    const centerLat = dwarfData.reduce((sum, dwarf) => sum + dwarf.location[0], 0) / dwarfData.length;
+    const centerLng = dwarfData.reduce((sum, dwarf) => sum + dwarf.location[1], 0) / dwarfData.length;
     
-    // Add OpenStreetMap tiles
+    // Create the map centered at the calculated center of all dwarf houses
+    map = L.map('map').setView([centerLat, centerLng], 15);
+    
+    // Add sepia-toned map tiles for old map/newspaper look
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        className: 'sepia-tiles' // Apply sepia filter via CSS
     }).addTo(map);
     
     // Add custom dwarf house icon
     const dwarfIcon = L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', // Red for better visibility on sepia map
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
         iconSize: [25, 41],
         iconAnchor: [12, 41],
@@ -142,8 +176,17 @@ function initMap() {
     // Add markers for each dwarf house
     dwarfData.forEach(dwarf => {
         const popupContent = dwarf.found ? 
-            `<b>Dom ${dwarf.name}a</b><br>✅ Znaleziony!<br>${dwarf.description}<br><a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>` : 
-            `<b>Dom ${dwarf.name}a</b><br>Znajdź go i zeskanuj kod QR!`;
+            `<div class="map-popup found">
+                <div class="popup-title">Dom ${dwarf.name}a</div>
+                <div class="popup-status">✅ Odkryto!</div>
+                <div class="popup-desc">${dwarf.description}</div>
+                <a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>
+            </div>` : 
+            `<div class="map-popup">
+                <div class="popup-title">Dom ${dwarf.name}a</div>
+                <div class="popup-status">❓ Nie odkryto</div>
+                <div class="popup-desc">Znajdź go i zeskanuj kod QR!</div>
+            </div>`;
             
         const marker = L.marker(dwarf.location, { icon: dwarfIcon })
             .addTo(map)
@@ -152,8 +195,66 @@ function initMap() {
         markers.push(marker);
     });
     
-    // Add user location functionality
-    showUserLocation();
+    // Fit the map to show all dwarf houses with a slight padding
+    fitMapToDwarfs();
+    
+    // Add locate control that follows the user
+    L.control.locate({
+        position: 'bottomright',
+        locateOptions: {
+            enableHighAccuracy: true
+        }
+    }).addTo(map);
+}
+
+// Function to fit map bounds to all dwarf markers
+function fitMapToDwarfs() {
+    // Create a bounds object
+    const bounds = L.latLngBounds();
+    
+    // Extend the bounds to include each dwarf house location
+    dwarfData.forEach(dwarf => {
+        bounds.extend(dwarf.location);
+    });
+    
+    // Add a slight padding to the bounds
+    const padding = 0.3; // in km
+    const paddedBounds = bounds.pad(padding);
+    
+    // Set the map view to these bounds
+    map.fitBounds(paddedBounds);
+}
+
+// Calculate distance between two points
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Promień Ziemi in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// Funkcja pokazująca odległość do domów krasnoludków
+function showDistanceToDwarfs(userLat, userLon) {
+    dwarfData.forEach((dwarf, index) => {
+        const distance = calculateDistance(userLat, userLon, dwarf.location[0], dwarf.location[1]);
+        const distanceText = distance < 1 ? 
+            `${(distance * 1000).toFixed(0)} m` : 
+            `${distance.toFixed(1)} km`;
+        
+        let popupContent = `<b>Dom ${dwarf.name}a</b><br>Odległość: ${distanceText}<br>`;
+        
+        if (dwarf.found) {
+            popupContent += `✅ Znaleziony!<br>${dwarf.description}<br><a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>`;
+        } else {
+            popupContent += `Znajdź go i zeskanuj kod QR!`;
+        }
+        
+        markers[index].bindPopup(popupContent);
+    });
 }
 
 // Handle QR code scanning
@@ -291,7 +392,7 @@ function showUserLocation() {
                             
                             // Dodaj marker lokalizacji użytkownika
                             const userIcon = L.icon({
-                                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png', // Gold for user to stand out
                                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                                 iconSize: [25, 41],
                                 iconAnchor: [12, 41],
@@ -300,7 +401,7 @@ function showUserLocation() {
                             });
                             
                             userLocationMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map)
-                                .bindPopup('Jesteś tutaj!').openPopup();
+                                .bindPopup('<div class="map-popup user-location"><div class="popup-title">Twoja lokalizacja</div><div class="popup-status">Jesteś tutaj!</div></div>').openPopup();
                             
                             // Dodaj okrąg pokazujący dokładność lokalizacji
                             userLocationCircle = L.circle([lat, lng], {
@@ -311,8 +412,22 @@ function showUserLocation() {
                                 fillOpacity: 0.15
                             }).addTo(map);
                             
-                            // Wyśrodkuj mapę na lokalizacji użytkownika
-                            map.setView([lat, lng], 16);
+                            // Create a bounds object that includes both the user and dwarf houses
+                            const bounds = L.latLngBounds();
+                            
+                            // Add user location to bounds
+                            bounds.extend([lat, lng]);
+                            
+                            // Add all dwarf houses to bounds
+                            dwarfData.forEach(dwarf => {
+                                bounds.extend(dwarf.location);
+                            });
+                            
+                            // Fit the map to show both the user and all dwarfs
+                            map.fitBounds(bounds, {
+                                padding: [50, 50], // Add padding in pixels
+                                maxZoom: 16 // Restrict max zoom level
+                            });
                             
                             // Pokaż informację o odległości do domów krasnoludków
                             showDistanceToDwarfs(lat, lng);
