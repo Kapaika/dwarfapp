@@ -83,39 +83,33 @@ function updateDwarfFoundDisplay() {
     foundCount.textContent = found;
     totalCount.textContent = dwarfData.length;
     
-    // Update the header text to show we're displaying all dwarf houses
+    // Update the header text to show we're displaying only found dwarf houses
     const dwarfInfoHeader = document.querySelector('.dwarf-info h2');
     if (dwarfInfoHeader) {
         dwarfInfoHeader.textContent = `Domy Krasnoludków: ${found}/${dwarfData.length} Znalezionych`;
     }
     
-    // Populate the list - now showing ALL dwarfs, not just found ones
-    dwarfData.forEach(dwarf => {
+    // Populate the list - now showing ONLY found dwarfs
+    const foundDwarfs = dwarfData.filter(dwarf => dwarf.found);
+    
+    if (foundDwarfs.length === 0) {
+        // Show message when no dwarfs are found yet
         const listItem = document.createElement('li');
-        
-        // Make all dwarf names clickable
-        const dwarfNameLink = document.createElement('a');
-        dwarfNameLink.href = getDwarfPageUrl(dwarf);
-        dwarfNameLink.className = 'dwarf-name-link';
-        dwarfNameLink.textContent = dwarf.name;
-        
-        if (!dwarf.found) {
-            // Add blur effect class to not-found dwarfs
-            listItem.classList.add('not-found');
-            dwarfNameLink.classList.add('blurred');
-        }
-        
-        // Make the entire list item clickable
-        const fullItemLink = document.createElement('a');
-        fullItemLink.href = getDwarfPageUrl(dwarf);
-        fullItemLink.className = 'list-item-link';
-        fullItemLink.setAttribute('aria-label', `Przejdź do strony ${dwarf.name}a`);
-        listItem.appendChild(fullItemLink);
-        
-        listItem.appendChild(dwarfNameLink);
-        
-        if (dwarf.found) {
+        listItem.className = 'no-dwarfs-found';
+        listItem.textContent = 'Nie znaleziono jeszcze żadnej chatynki. Wprowadź magiczny kod aby odkryć pierwszy dom!';
+        foundDwarfsList.appendChild(listItem);
+    } else {
+        foundDwarfs.forEach(dwarf => {
+            const listItem = document.createElement('li');
             listItem.classList.add('found');
+            
+            // Make dwarf names clickable
+            const dwarfNameLink = document.createElement('a');
+            dwarfNameLink.href = getDwarfPageUrl(dwarf);
+            dwarfNameLink.className = 'dwarf-name-link';
+            dwarfNameLink.textContent = dwarf.name;
+            
+            listItem.appendChild(dwarfNameLink);
             listItem.appendChild(document.createTextNode(' - Znaleziony! '));
             
             const detailsLink = document.createElement('a');
@@ -124,22 +118,19 @@ function updateDwarfFoundDisplay() {
             detailsLink.textContent = 'Zobacz szczegóły';
             
             listItem.appendChild(detailsLink);
-        } else {
-            // Add styling but keep it clickable
-            listItem.appendChild(document.createTextNode(' - Jeszcze nie znaleziony'));
-        }
-        
-        // Add the list item to the list
-        foundDwarfsList.appendChild(listItem);
-        
-        // Add click handler to the list item (for better mobile experience)
-        listItem.addEventListener('click', function(e) {
-            // Only navigate if the click wasn't on a specific link
-            if (!e.target.closest('a')) {
-                window.location.href = getDwarfPageUrl(dwarf);
-            }
+            
+            // Add the list item to the list
+            foundDwarfsList.appendChild(listItem);
+            
+            // Add click handler to the list item (for better mobile experience)
+            listItem.addEventListener('click', function(e) {
+                // Only navigate if the click wasn't on a specific link
+                if (!e.target.closest('a')) {
+                    window.location.href = getDwarfPageUrl(dwarf);
+                }
+            });
         });
-    });
+    }
 }
 
 // Initialize the map
@@ -185,7 +176,7 @@ function initMap() {
             `<div class="map-popup">
                 <div class="popup-title">Dom ${dwarf.name}a</div>
                 <div class="popup-status">❓ Nie odkryto</div>
-                <div class="popup-desc">Znajdź go i zeskanuj kod QR!</div>
+                <div class="popup-desc">Znajdź go i wprowadź kod magiczny!</div>
             </div>`;
             
         const marker = L.marker(dwarf.location, { icon: dwarfIcon })
@@ -198,13 +189,8 @@ function initMap() {
     // Fit the map to show all dwarf houses with a slight padding
     fitMapToDwarfs();
     
-    // Add locate control that follows the user
-    L.control.locate({
-        position: 'bottomright',
-        locateOptions: {
-            enableHighAccuracy: true
-        }
-    }).addTo(map);
+    // Add custom user location functionality
+    showUserLocation();
 }
 
 // Function to fit map bounds to all dwarf markers
@@ -250,106 +236,11 @@ function showDistanceToDwarfs(userLat, userLon) {
         if (dwarf.found) {
             popupContent += `✅ Znaleziony!<br>${dwarf.description}<br><a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>`;
         } else {
-            popupContent += `Znajdź go i zeskanuj kod QR!`;
+            popupContent += `Znajdź go i wprowadź kod magiczny!`;
         }
         
         markers[index].bindPopup(popupContent);
     });
-}
-
-// Handle QR code scanning
-let html5QrCode;
-
-function startScanner() {
-    const qrReader = document.getElementById('qr-reader');
-    qrReader.style.display = 'block';
-    
-    html5QrCode = new Html5Qrcode("qr-reader");
-    
-    // Dostosuj rozmiar skanera w zależności od rozmiaru ekranu
-    const isMobile = window.innerWidth < 480;
-    const qrboxSize = isMobile ? Math.min(window.innerWidth * 0.8, 250) : 250;
-    const qrConfig = { 
-        fps: 10, 
-        qrbox: { width: qrboxSize, height: qrboxSize },
-        aspectRatio: isMobile ? 1.0 : undefined
-    };
-    
-    html5QrCode.start(
-        { 
-            facingMode: "environment",
-            // Dodaj podpowiedzi dla lepszego doświadczenia mobilnego
-            focusMode: "continuous"
-        },
-        qrConfig,
-        onScanSuccess,
-        onScanFailure
-    );
-    
-    // Jeśli jest na telefonie, zablokuj przewijanie podczas skanowania
-    if (isMobile) {
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function stopScanner() {
-    if (html5QrCode && html5QrCode.isScanning) {
-        html5QrCode.stop().then(() => {
-            console.log("QR Code scanning stopped");
-            document.getElementById('qr-reader').style.display = 'none';
-            
-            // Przywróć możliwość przewijania na urządzeniach mobilnych
-            document.body.style.overflow = '';
-        }).catch(err => {
-            console.error("Failed to stop QR Code scanning", err);
-        });
-    }
-}
-
-function onScanSuccess(decodedText) {
-    console.log(`QR Code detected: ${decodedText}`);
-    
-    // Check if this QR code matches any dwarf
-    const matchingDwarf = dwarfData.find(dwarf => dwarf.qrCode === decodedText);
-    
-    if (matchingDwarf) {
-        // Found a matching dwarf!
-        if (!matchingDwarf.found) {
-            matchingDwarf.found = true;
-            saveDwarfData();
-            
-            // Pokaż komunikat sukcesu
-            const resultsElement = document.getElementById('qr-reader-results');
-            resultsElement.innerHTML = `Gratulacje! Znalazłeś dom ${matchingDwarf.name}a! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię ${matchingDwarf.name}a</a>`;
-            resultsElement.style.color = '#2d6a4f';
-            
-            // Zatrzymaj skanowanie po znalezieniu
-            stopScanner();
-            
-            // Zaktualizuj marker na mapie
-            const markerIndex = dwarfData.findIndex(d => d.id === matchingDwarf.id);
-            if (markerIndex !== -1) {
-                markers[markerIndex].setPopupContent(
-                    `<b>Dom ${matchingDwarf.name}a</b><br>✅ Znaleziony!<br>${matchingDwarf.description}<br><a href="${getDwarfPageUrl(matchingDwarf)}" class="popup-link">Zobacz szczegóły</a>`
-                );
-            }
-        } else {
-            // Już znaleziony krasnoludek
-            const resultsElement = document.getElementById('qr-reader-results');
-            resultsElement.textContent = `Już znalazłeś dom ${matchingDwarf.name}a!`;
-            resultsElement.style.color = '#40916c';
-        }
-    } else {
-        // Brak pasującego kodu QR
-        const resultsElement = document.getElementById('qr-reader-results');
-        resultsElement.textContent = `To nie wygląda na kod QR domu krasnoludka. Szukaj dalej!`;
-        resultsElement.style.color = '#9c2a2a';
-    }
-}
-
-function onScanFailure(error) {
-    // Handle scan failure silently
-    console.warn(`QR scan error: ${error}`);
 }
 
 // Funkcja pokazująca aktualną lokalizację użytkownika
@@ -553,12 +444,6 @@ function checkMobileDevice() {
 
 // Funkcja dostosowująca aplikację do urządzeń mobilnych
 function adjustForMobileDevice() {
-    // Dostosuj rozmiar QR readera
-    const qrReader = document.getElementById('qr-reader');
-    if (qrReader) {
-        qrReader.style.maxWidth = '100%';
-    }
-    
     // Dostosuj wysokość mapy
     if (window.innerHeight < 700) {
         document.getElementById('map').style.height = '300px';
@@ -583,6 +468,56 @@ function getDwarfPageUrl(dwarf) {
     return `dwarfs/${dwarf.id}-${normalizePolishName(dwarf.name)}.html`;
 }
 
+// Handle code input
+function handleCodeInput(code) {
+    const trimmedCode = code.trim().toUpperCase();
+    
+    // Special codes
+    if (trimmedCode === "420") {
+        window.location.href = "dwarfs/chata-niechciana.html";
+        return;
+    }
+    
+    // Check if this code matches any dwarf QR code
+    const matchingDwarf = dwarfData.find(dwarf => dwarf.qrCode === trimmedCode);
+    
+    if (matchingDwarf) {
+        // Found a matching dwarf!
+        if (!matchingDwarf.found) {
+            matchingDwarf.found = true;
+            saveDwarfData();
+            
+            // Show success message
+            const resultsElement = document.getElementById('code-results');
+            resultsElement.innerHTML = `Gratulacje! Znalazłeś dom ${matchingDwarf.name}a! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię ${matchingDwarf.name}a</a>`;
+            resultsElement.style.color = '#2d6a4f';
+            
+            // Update marker on map
+            const markerIndex = dwarfData.findIndex(d => d.id === matchingDwarf.id);
+            if (markerIndex !== -1) {
+                markers[markerIndex].setPopupContent(
+                    `<div class="map-popup found">
+                        <div class="popup-title">Dom ${matchingDwarf.name}a</div>
+                        <div class="popup-status">✅ Odkryto!</div>
+                        <div class="popup-desc">${matchingDwarf.description}</div>
+                        <a href="${getDwarfPageUrl(matchingDwarf)}" class="popup-link">Zobacz szczegóły</a>
+                    </div>`
+                );
+            }
+        } else {
+            // Already found dwarf
+            const resultsElement = document.getElementById('code-results');
+            resultsElement.innerHTML = `Już znalazłeś dom ${matchingDwarf.name}a! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię ${matchingDwarf.name}a</a>`;
+            resultsElement.style.color = '#40916c';
+        }
+    } else {
+        // No matching code
+        const resultsElement = document.getElementById('code-results');
+        resultsElement.textContent = `Nieprawidłowy kod magiczny. Spróbuj ponownie!`;
+        resultsElement.style.color = '#9c2a2a';
+    }
+}
+
 // Initialize everything when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the map
@@ -591,25 +526,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load saved data
     loadDwarfData();
     
-    // Set up the scanner button
-    const startScannerButton = document.getElementById('start-scanner');
-    startScannerButton.addEventListener('click', () => {
-        const qrReader = document.getElementById('qr-reader');
-        if (qrReader.style.display === 'none' || qrReader.style.display === '') {
-            startScanner();
-            startScannerButton.textContent = 'Wyłącz Skaner';
-        } else {
-            stopScanner();
-            startScannerButton.textContent = 'Włącz Skaner';
-        }
-    });
+    // Set up the code input functionality
+    const submitCodeButton = document.getElementById('submit-code');
+    const magicCodeInput = document.getElementById('magic-code');
     
-    // Generuj adresy URL kodów QR (do wydrukowania)
-    console.log("Adresy URL kodów QR dla każdego krasnoludka (do wydrukowania):");
-    dwarfData.forEach(dwarf => {
-        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(dwarf.qrCode)}`;
-        console.log(`${dwarf.name}: ${qrCodeUrl}`);
-    });
+    if (submitCodeButton && magicCodeInput) {
+        submitCodeButton.addEventListener('click', () => {
+            const code = magicCodeInput.value;
+            if (code) {
+                handleCodeInput(code);
+                magicCodeInput.value = ''; // Clear input after submission
+            } else {
+                const resultsElement = document.getElementById('code-results');
+                resultsElement.textContent = 'Proszę wprowadzić kod magiczny!';
+                resultsElement.style.color = '#9c2a2a';
+            }
+        });
+        
+        // Allow Enter key to submit the code
+        magicCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitCodeButton.click();
+            }
+        });
+    }
     
     // Sprawdź, czy konwersja nazw krasnoludków działa poprawnie (do debugowania)
     console.log("Weryfikacja generowanych URL-i stron krasnoludków:");

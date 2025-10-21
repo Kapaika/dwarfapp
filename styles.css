@@ -167,8 +167,8 @@ h2 {
     transform: translateY(-2px) !important;
 }
 
-/* QR Scanner styles */
-.scanner-container {
+/* Code Input styles */
+.code-input-container {
     background-color: #e8d9b5; /* Light beige background */
     border-radius: 0px; /* Square corners */
     padding: 20px;
@@ -179,14 +179,71 @@ h2 {
     position: relative;
 }
 
-/* Decorative compass rose for scanner container */
-.scanner-container:before {
+/* Decorative compass rose for code input container */
+.code-input-container:before {
     content: "⧓";
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 24px;
     color: #2e1f00;
+}
+
+.code-input-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+#magic-code {
+    padding: 12px 15px;
+    border: 2px solid #2e1f00;
+    border-radius: 0px;
+    background-color: #f5f0e6;
+    font-family: 'Oldnewspapertypes', 'Times New Roman', serif;
+    font-size: 16px;
+    text-align: center;
+    min-width: 200px;
+    text-transform: uppercase;
+}
+
+#magic-code:focus {
+    outline: none;
+    border-color: #5a4028;
+    background-color: #ffffff;
+}
+
+#code-results {
+    margin-top: 15px;
+    padding: 10px;
+    font-weight: bold;
+    min-height: 20px;
+}
+
+.qr-scanner-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed #2e1f00;
+}
+
+.qr-toggle-section {
+    margin-top: 20px;
+}
+
+.button.secondary {
+    background-color: #d8c8a8;
+    color: #2e1f00;
+    border: 2px solid #2e1f00;
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+.button.secondary:hover {
+    background-color: #c8b898;
+    transform: translateY(-1px);
 }
 
 #qr-reader {
@@ -277,6 +334,16 @@ h2 {
 #found-dwarfs {
     list-style-type: none;
     margin-top: 15px;
+}
+
+.no-dwarfs-found {
+    background-color: #f8f5f0 !important;
+    color: #666 !important;
+    font-style: italic;
+    text-align: center;
+    padding: 20px !important;
+    border: 2px dashed #ccc !important;
+    margin: 10px 0 !important;
 }
 
 #found-dwarfs li {
@@ -577,7 +644,7 @@ h2 {
   #map {
     margin-bottom: 10px;
   }
-  .scanner-container, .info-container {
+  .code-input-container, .info-container {
     padding: 14px 8px;
     margin-bottom: 16px;
     border-width: 2px;
