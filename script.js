@@ -471,10 +471,43 @@ function getDwarfPageUrl(dwarf) {
 // Handle code input
 function handleCodeInput(code) {
     const trimmedCode = code.trim().toUpperCase();
+    console.log("Received code:", code);
+    console.log("Trimmed code:", trimmedCode);
     
     // Special codes
     if (trimmedCode === "3541") {
-        window.location.href = "dwarfs/chata-niechciana.html";
+        console.log("Redirecting to chata_niekochana.html");
+        window.location.href = "dwarfs/chata_niekochana.html";
+        return;
+    }
+    if (trimmedCode === "9331") {
+        console.log("Redirecting to bistro.html");
+        window.location.href = "dwarfs/bistro.html";
+        return;
+    }
+    if (trimmedCode === "4659") {
+        console.log("Redirecting to bracia.html");
+        window.location.href = "dwarfs/bracia.html";
+        return;
+    }
+    if (trimmedCode === "7291") {
+        console.log("Redirecting to bydlin.html");
+        window.location.href = "dwarfs/bydlin.html";
+        return;
+    }
+    if (trimmedCode === "2214") {
+        console.log("Redirecting to januszówka.html");
+        window.location.href = "dwarfs/januszówka.html";
+        return;
+    }
+    if (trimmedCode === "1942") {
+        console.log("Redirecting to leśnik.html");
+        window.location.href = "dwarfs/leśnik.html";
+        return;
+    }
+    if (trimmedCode === "2375") {
+        console.log("Redirecting to olkuskie_iglice.html");
+        window.location.href = "dwarfs/olkuskie_iglice.html";
         return;
     }
     
@@ -531,8 +564,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const magicCodeInput = document.getElementById('magic-code');
     
     if (submitCodeButton && magicCodeInput) {
+        console.log("Event listeners being set up");
         submitCodeButton.addEventListener('click', () => {
+            console.log("Button clicked!");
             const code = magicCodeInput.value;
+            console.log("Input value:", code);
             if (code) {
                 handleCodeInput(code);
                 magicCodeInput.value = ''; // Clear input after submission
