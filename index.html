@@ -19,23 +19,24 @@
 <body>
     <div class="container">
         <header>
-            <h1>Poszukiwanie Chatynek</h1>
-            <p>Znajdź ukryte domy szesciu elfow i wprowadź magiczne kody, aby odkryć ich historie!</p>
+            <h1>Witamy w Chatynkowie</h1>
+            <p>Jeśli tu jesteś oznacza, że znalazłeś jedną z magicznych Chatynek i chcesz usłyszeć jej historię.</p>
+            <p>Wpisz magiczny czterocyfrowy kod z tabliczki, która jest obok Chatynki i dowiedz się kto w niej mieszka.</p>
         </header>
         
         <main>
-            <div class="map-container">
-                <div id="map"></div>
-                <!-- <p class="map-instructions">Kliknij przycisk 📍 w prawym dolnym rogu mapy, aby zobaczyć swoją lokalizację i odległość do domów krasnoludków!</p> -->
-            </div>
-            
             <div class="code-input-container">
                 <h2>Wpisz magiczny kod</h2>
                 <div class="code-input-section">
-                    <input type="text" id="magic-code" placeholder="Wprowadź kod magiczny..." maxlength="10">
+                    <input type="text" id="magic-code" maxlength="10">
                     <button id="submit-code" class="button">Zatwierdź</button>
                 </div>
                 <div id="code-results"></div>
+            </div>
+            
+            <div class="map-container">
+                <div id="map"></div>
+                <!-- <p class="map-instructions">Kliknij przycisk 📍 w prawym dolnym rogu mapy, aby zobaczyć swoją lokalizację i odległość do domów krasnoludków!</p> -->
             </div>
 
             <div class="info-container">
@@ -46,6 +47,7 @@
                     </ul>
                 </div>
             </div>
+            
         </main>
         
         <footer>

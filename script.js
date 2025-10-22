@@ -86,7 +86,7 @@ function updateDwarfFoundDisplay() {
     // Update the header text to show we're displaying only found dwarf houses
     const dwarfInfoHeader = document.querySelector('.dwarf-info h2');
     if (dwarfInfoHeader) {
-        dwarfInfoHeader.textContent = `Domy Krasnoludków: ${found}/${dwarfData.length} Znalezionych`;
+        dwarfInfoHeader.textContent = `Chatynki: ${found}/${dwarfData.length} Znalezionych`;
     }
     
     // Populate the list - now showing ONLY found dwarfs
@@ -473,7 +473,7 @@ function handleCodeInput(code) {
     const trimmedCode = code.trim().toUpperCase();
     
     // Special codes
-    if (trimmedCode === "420") {
+    if (trimmedCode === "3541") {
         window.location.href = "dwarfs/chata-niechciana.html";
         return;
     }
