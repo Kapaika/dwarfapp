@@ -1,52 +1,44 @@
-// Inicjalizacja danych krasnoludków
+// Inicjalizacja danych chatynek
 const dwarfData = [
     {
         id: 1,
-        name: "Mędrek",
-        location: [50.32411, 19.62878], // Dom nr 1 - 50°19'26.8"N 19°37'43.6"E
+        name: "Olkuskie Iglice",
+        location: [50.322389, 19.629750], // 50°19'20.6"N 19°37'47.1"E
         found: false,
-        description: "Przywódca siedmiu krasnoludków. Bardzo mądry i nosi okulary.",
-        qrCode: "dwarf-doc-1234"
+        description: "Tajemnicze skalne formacje skrywające starożytne historie.",
+        qrCode: "2375"
     },
     {
         id: 2,
-        name: "Gburek",
-        location: [50.32239, 19.62975], // Dom nr 2 - 50°19'20.6"N 19°37'47.1"E
+        name: "Januszówka",
+        location: [50.306778, 19.616500], // 50°18'24.4"N 19°36'59.4"E
         found: false,
-        description: "Zawsze w złym humorze, ale ma złote serce.",
-        qrCode: "dwarf-grumpy-5678"
+        description: "Urokliwa chatynka pełna wspomnień i opowieści.",
+        qrCode: "2214"
     },
     {
         id: 3,
-        name: "Wesołek",
-        location: [50.30772, 19.61908], // Dom nr 3 - 50°18'27.8"N 19°37'08.7"E
+        name: "Bydlin",
+        location: [50.387583, 19.645306], // 50°23'15.3"N 19°38'43.1"E
         found: false,
-        description: "Zawsze uśmiechnięty i wprowadza radość wszystkim wokół.",
-        qrCode: "dwarf-happy-9012"
+        description: "Spokojna osada z bogatą historią i tradycjami.",
+        qrCode: "7291"
     },
     {
         id: 4,
-        name: "Śpioszek",
-        location: [50.30678, 19.61650], // Dom nr 4 - 50°18'24.4"N 19°36'59.4"E
+        name: "Domek Dwóch Braci",
+        location: [50.307722, 19.619083], // 50°18'27.8"N 19°37'08.7"E
         found: false,
-        description: "Może zasnąć wszędzie i o każdej porze.",
-        qrCode: "dwarf-sleepy-3456"
+        description: "Miejsce, gdzie mieszkają dwaj nierozłączni bracia.",
+        qrCode: "4659"
     },
     {
         id: 5,
-        name: "Nieśmiałek",
-        location: [50.33558, 19.62711], // Dom nr 5 - 50°20'08.1"N 19°37'37.6"E
+        name: "Bistro",
+        location: [50.335917, 19.562000], // 50°20'09.3"N 19°33'43.2"E
         found: false,
-        description: "Nieśmiały i łatwo się zawstydza, ma różowe policzki.",
-        qrCode: "dwarf-bashful-7890"
-    },
-    {
-        id: 6,
-        name: "Apsik",
-        location: [50.32853, 19.62428], // Dom nr 6 - 50°19'42.7"N 19°37'27.4"E
-        found: false,
-        description: "Ma okropne alergie i często kicha.",
-        qrCode: "dwarf-sneezy-1357"
+        description: "Przytulne miejsce pełne smaków i aromatów.",
+        qrCode: "9331"
     },
 ];
 
@@ -93,10 +85,10 @@ function updateDwarfFoundDisplay() {
     const foundDwarfs = dwarfData.filter(dwarf => dwarf.found);
     
     if (foundDwarfs.length === 0) {
-        // Show message when no dwarfs are found yet
+        // Show message when no chatynki are found yet
         const listItem = document.createElement('li');
         listItem.className = 'no-dwarfs-found';
-        listItem.textContent = 'Nie znaleziono jeszcze żadnej chatynki. Wprowadź magiczny kod aby odkryć pierwszy dom!';
+        listItem.textContent = 'Nie znaleziono jeszcze żadnej chatynki. Wprowadź magiczny kod aby odkryć pierwszą chatynkę!';
         foundDwarfsList.appendChild(listItem);
     } else {
         foundDwarfs.forEach(dwarf => {
@@ -164,17 +156,17 @@ function initMap() {
         shadowSize: [41, 41]
     });
     
-    // Add markers for each dwarf house
+    // Add markers for each chatynka
     dwarfData.forEach(dwarf => {
         const popupContent = dwarf.found ? 
             `<div class="map-popup found">
-                <div class="popup-title">Dom ${dwarf.name}a</div>
+                <div class="popup-title">${dwarf.name}</div>
                 <div class="popup-status">✅ Odkryto!</div>
                 <div class="popup-desc">${dwarf.description}</div>
                 <a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>
             </div>` : 
             `<div class="map-popup">
-                <div class="popup-title">Dom ${dwarf.name}a</div>
+                <div class="popup-title">${dwarf.name}</div>
                 <div class="popup-status">❓ Nie odkryto</div>
                 <div class="popup-desc">Znajdź go i wprowadź kod magiczny!</div>
             </div>`;
@@ -231,7 +223,7 @@ function showDistanceToDwarfs(userLat, userLon) {
             `${(distance * 1000).toFixed(0)} m` : 
             `${distance.toFixed(1)} km`;
         
-        let popupContent = `<b>Dom ${dwarf.name}a</b><br>Odległość: ${distanceText}<br>`;
+        let popupContent = `<b>${dwarf.name}</b><br>Odległość: ${distanceText}<br>`;
         
         if (dwarf.found) {
             popupContent += `✅ Znaleziony!<br>${dwarf.description}<br><a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>`;
@@ -380,12 +372,12 @@ function showDistanceToDwarfs(userLat, userLon) {
             `${(distance * 1000).toFixed(0)} m` : 
             `${distance.toFixed(1)} km`;
         
-        let popupContent = `<b>Dom ${dwarf.name}a</b><br>Odległość: ${distanceText}<br>`;
+        let popupContent = `<b>${dwarf.name}</b><br>Odległość: ${distanceText}<br>`;
         
         if (dwarf.found) {
             popupContent += `✅ Znaleziony!<br>${dwarf.description}<br><a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>`;
         } else {
-            popupContent += `Znajdź go i zeskanuj kod QR!`;
+            popupContent += `Znajdź go i wprowadź kod magiczny!`;
         }
         
         markers[index].bindPopup(popupContent);
@@ -463,9 +455,18 @@ function normalizePolishName(name) {
         .join('');
 }
 
-// Helper function to get dwarf page URL
+// Helper function to get chatynka page URL
 function getDwarfPageUrl(dwarf) {
-    return `dwarfs/${dwarf.id}-${normalizePolishName(dwarf.name)}.html`;
+    // Map chatynka names to their corresponding HTML files
+    const pageMap = {
+        "Olkuskie Iglice": "olkuskie_iglice.html",
+        "Januszówka": "januszówka.html", 
+        "Bydlin": "bydlin.html",
+        "Domek Dwóch Braci": "bracia.html",
+        "Bistro": "bistro.html"
+    };
+    
+    return `dwarfs/${pageMap[dwarf.name] || 'chata_niekochana.html'}`;
 }
 
 // Handle code input
@@ -474,7 +475,30 @@ function handleCodeInput(code) {
     console.log("Received code:", code);
     console.log("Trimmed code:", trimmedCode);
     
-    // Special codes
+    // First, check if this code matches any dwarf QR code and mark as found
+    const matchingDwarf = dwarfData.find(dwarf => dwarf.qrCode === trimmedCode);
+    
+    if (matchingDwarf && !matchingDwarf.found) {
+        // Mark the dwarf as found and save to localStorage
+        matchingDwarf.found = true;
+        saveDwarfData();
+        console.log(`Marked ${matchingDwarf.name} as found!`);
+        
+        // Update marker on map
+        const markerIndex = dwarfData.findIndex(d => d.id === matchingDwarf.id);
+        if (markerIndex !== -1) {
+            markers[markerIndex].setPopupContent(
+                `<div class="map-popup found">
+                    <div class="popup-title">${matchingDwarf.name}</div>
+                    <div class="popup-status">✅ Odkryto!</div>
+                    <div class="popup-desc">${matchingDwarf.description}</div>
+                    <a href="${getDwarfPageUrl(matchingDwarf)}" class="popup-link">Zobacz szczegóły</a>
+                </div>`
+            );
+        }
+    }
+    
+    // Now handle redirects for special codes
     if (trimmedCode === "3541") {
         console.log("Redirecting to chata_niekochana.html");
         window.location.href = "dwarfs/chata_niekochana.html";
@@ -511,38 +535,16 @@ function handleCodeInput(code) {
         return;
     }
     
-    // Check if this code matches any dwarf QR code
-    const matchingDwarf = dwarfData.find(dwarf => dwarf.qrCode === trimmedCode);
-    
+    // If we get here, the code didn't match any special redirect codes
     if (matchingDwarf) {
-        // Found a matching dwarf!
-        if (!matchingDwarf.found) {
-            matchingDwarf.found = true;
-            saveDwarfData();
-            
-            // Show success message
-            const resultsElement = document.getElementById('code-results');
-            resultsElement.innerHTML = `Gratulacje! Znalazłeś dom ${matchingDwarf.name}a! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię ${matchingDwarf.name}a</a>`;
-            resultsElement.style.color = '#2d6a4f';
-            
-            // Update marker on map
-            const markerIndex = dwarfData.findIndex(d => d.id === matchingDwarf.id);
-            if (markerIndex !== -1) {
-                markers[markerIndex].setPopupContent(
-                    `<div class="map-popup found">
-                        <div class="popup-title">Dom ${matchingDwarf.name}a</div>
-                        <div class="popup-status">✅ Odkryto!</div>
-                        <div class="popup-desc">${matchingDwarf.description}</div>
-                        <a href="${getDwarfPageUrl(matchingDwarf)}" class="popup-link">Zobacz szczegóły</a>
-                    </div>`
-                );
-            }
+        // Show success message for already processed dwarf
+        const resultsElement = document.getElementById('code-results');
+        if (matchingDwarf.found) {
+            resultsElement.innerHTML = `Już znalazłeś ${matchingDwarf.name}! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię</a>`;
         } else {
-            // Already found dwarf
-            const resultsElement = document.getElementById('code-results');
-            resultsElement.innerHTML = `Już znalazłeś dom ${matchingDwarf.name}a! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię ${matchingDwarf.name}a</a>`;
-            resultsElement.style.color = '#40916c';
+            resultsElement.innerHTML = `Gratulacje! Znalazłeś ${matchingDwarf.name}! <br><a href="${getDwarfPageUrl(matchingDwarf)}" class="success-link">Zobacz historię</a>`;
         }
+        resultsElement.style.color = '#2d6a4f';
     } else {
         // No matching code
         const resultsElement = document.getElementById('code-results');
