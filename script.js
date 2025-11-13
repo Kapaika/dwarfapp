@@ -470,68 +470,71 @@ function getDwarfPageUrl(dwarf) {
 }
 
 // Handle code input
-function handleCodeInput(code) {
+async function handleCodeInput(code) {
     const trimmedCode = code.trim().toUpperCase();
     console.log("Received code:", code);
-    console.log("Trimmed code:", trimmedCode);
-    
-    // First, check if this code matches any dwarf QR code and mark as found
+
     const matchingDwarf = dwarfData.find(dwarf => dwarf.qrCode === trimmedCode);
-    
+
+    // First increment counter if this is a valid code (whether found or not)
+    if (matchingDwarf) {
+        // Always increment the counter in Firebase when a valid code is entered
+        await incrementCounterInFirebase(trimmedCode);
+        console.log(`Counter incremented for ${matchingDwarf.name}!`);
+    }
+
     if (matchingDwarf && !matchingDwarf.found) {
         // Mark the dwarf as found and save to localStorage
         matchingDwarf.found = true;
         saveDwarfData();
         console.log(`Marked ${matchingDwarf.name} as found!`);
-        
-        // Update marker on map
-        const markerIndex = dwarfData.findIndex(d => d.id === matchingDwarf.id);
-        if (markerIndex !== -1) {
-            markers[markerIndex].setPopupContent(
-                `<div class="map-popup found">
-                    <div class="popup-title">${matchingDwarf.name}</div>
-                    <div class="popup-status">✅ Odkryto!</div>
-                    <div class="popup-desc">${matchingDwarf.description}</div>
-                    <a href="${getDwarfPageUrl(matchingDwarf)}" class="popup-link">Zobacz szczegóły</a>
-                </div>`
-            );
-        }
+
+        // Fetch updated counters and update the map
+        const counters = await fetchCountersFromFirebase();
+        updateMapMarkersWithCounters(counters);
     }
-    
-    // Now handle redirects for special codes
+
+    // Handle redirects for special codes (after Firebase operations are complete)
+    // Add a small delay to ensure Firebase operations complete before redirect
+    const redirectWithDelay = (url) => {
+        setTimeout(() => {
+            window.location.href = url;
+        }, 500); // 500ms delay to allow Firebase operations to complete
+    };
+
     if (trimmedCode === "3541") {
         console.log("Redirecting to chata_niekochana.html");
-        window.location.href = "dwarfs/chata_niekochana.html";
+        redirectWithDelay("dwarfs/chata_niekochana.html");
         return;
     }
     if (trimmedCode === "9331") {
         console.log("Redirecting to bistro.html");
-        window.location.href = "dwarfs/bistro.html";
+        redirectWithDelay("dwarfs/bistro.html");
         return;
     }
     if (trimmedCode === "4659") {
         console.log("Redirecting to bracia.html");
-        window.location.href = "dwarfs/bracia.html";
+        redirectWithDelay("dwarfs/bracia.html");
         return;
     }
     if (trimmedCode === "7291") {
         console.log("Redirecting to bydlin.html");
-        window.location.href = "dwarfs/bydlin.html";
+        redirectWithDelay("dwarfs/bydlin.html");
         return;
     }
     if (trimmedCode === "2214") {
         console.log("Redirecting to januszówka.html");
-        window.location.href = "dwarfs/januszówka.html";
+        redirectWithDelay("dwarfs/januszówka.html");
         return;
     }
     if (trimmedCode === "1942") {
         console.log("Redirecting to leśnik.html");
-        window.location.href = "dwarfs/leśnik.html";
+        redirectWithDelay("dwarfs/leśnik.html");
         return;
     }
     if (trimmedCode === "2375") {
         console.log("Redirecting to olkuskie_iglice.html");
-        window.location.href = "dwarfs/olkuskie_iglice.html";
+        redirectWithDelay("dwarfs/olkuskie_iglice.html");
         return;
     }
     
@@ -551,6 +554,69 @@ function handleCodeInput(code) {
         resultsElement.textContent = `Nieprawidłowy kod magiczny. Spróbuj ponownie!`;
         resultsElement.style.color = '#9c2a2a';
     }
+}
+
+// Increment the counter for a specific house in Firebase Firestore
+async function incrementCounterInFirebase(code) {
+    const db = firebase.firestore();
+    const counterDoc = db.collection('counters').doc(code);
+
+    try {
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(counterDoc);
+            const currentCount = doc.exists ? doc.data().count || 0 : 0;
+            transaction.set(counterDoc, { count: currentCount + 1 });
+        });
+        console.log(`Counter for ${code} incremented in Firebase!`);
+    } catch (error) {
+        console.error(`Error incrementing counter for ${code}:`, error);
+    }
+}
+
+// Fetch counters from Firebase Firestore
+async function fetchCountersFromFirebase() {
+    const db = firebase.firestore();
+    const countersCollection = db.collection('counters');
+
+    try {
+        const snapshot = await countersCollection.get();
+        const counters = {};
+        
+        snapshot.forEach(doc => {
+            counters[doc.id] = doc.data().count || 0;
+        });
+        
+        console.log('Counters loaded from Firebase:', counters);
+        return counters;
+    } catch (error) {
+        console.error('Error fetching counters from Firebase:', error);
+        return {};
+    }
+}
+
+// Update the map markers with counters
+function updateMapMarkersWithCounters(counters) {
+    dwarfData.forEach((dwarf, index) => {
+        const code = dwarf.qrCode;
+        const count = counters[code] || 0;
+
+        const popupContent = dwarf.found
+            ? `<div class="map-popup found">
+                <div class="popup-title">${dwarf.name}</div>
+                <div class="popup-status">✅ Odkryto!</div>
+                <div class="popup-desc">${dwarf.description}</div>
+                <div class="popup-counter">Liczba odwiedzin: ${count}</div>
+                <a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>
+            </div>`
+            : `<div class="map-popup">
+                <div class="popup-title">${dwarf.name}</div>
+                <div class="popup-status">❓ Nie odkryto</div>
+                <div class="popup-desc">Znajdź go i wprowadź kod magiczny!</div>
+                <div class="popup-counter">Liczba odwiedzin: ${count}</div>
+            </div>`;
+
+        markers[index].bindPopup(popupContent);
+    });
 }
 
 // Initialize everything when the page loads
@@ -597,4 +663,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Sprawdź czy użytkownik korzysta z urządzenia mobilnego i czy aplikacja jest otwarta bezpośrednio
     checkMobileDevice();
+    
+    // Fetch counters from Firebase and update markers
+    fetchCountersFromFirebase().then(counters => {
+        updateMapMarkersWithCounters(counters);
+    });
 });
