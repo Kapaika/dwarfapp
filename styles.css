@@ -143,9 +143,32 @@ h2 {
 }
 
 .popup-link {
+    display: inline-block;
+    margin: 5px 5px 0 0;
+    padding: 8px 12px;
     color: #2e1f00 !important;
-    text-decoration: underline;
+    text-decoration: none;
     font-weight: bold;
+    background-color: #e8d9b5;
+    border: 2px solid #2e1f00;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.popup-link:hover {
+    background-color: #d4c5a0;
+    transform: translateY(-2px);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navigate-link {
+    background-color: #40916c;
+    color: #ffffff !important;
+    border-color: #2d6a4f;
+}
+
+.navigate-link:hover {
+    background-color: #2d6a4f;
 }
 
 /* Style markers to look more vintage */
@@ -520,24 +543,7 @@ h2 {
     margin: 0 3px;
 }
 
-/* Style for popup links */
-.popup-link {
-    display: inline-block;
-    background-color: #2d6a4f;
-    color: white !important;
-    padding: 5px 10px;
-    border-radius: 15px;
-    text-decoration: none;
-    margin-top: 8px;
-    font-weight: bold;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.popup-link:hover {
-    background-color: #1b4332;
-    transform: scale(1.05);
-}
+/* Removed duplicate popup-link styles */
 
 /* Style map popups */
 .map-popup {
@@ -565,14 +571,7 @@ h2 {
     font-size: 0.9rem;
 }
 
-.popup-link {
-    display: inline-block;
-    margin-top: 5px;
-    font-family: 'OldNewspaperTypes', serif;
-    color: #2e1f00;
-    text-decoration: underline;
-    font-style: italic;
-}
+/* Removed duplicate popup-link styles */
 
 .map-popup.found .popup-title {
     color: #2e1f00;

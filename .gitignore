@@ -16,6 +16,20 @@ Icon
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
+# Dependencies
+node_modules/
+package-lock.json
+
+# Firebase config (contains API keys)
+firebase-config.js
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop

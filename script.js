@@ -158,17 +158,21 @@ function initMap() {
     
     // Add markers for each chatynka
     dwarfData.forEach(dwarf => {
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${dwarf.location[0]},${dwarf.location[1]}`;
+        
         const popupContent = dwarf.found ? 
             `<div class="map-popup found">
                 <div class="popup-title">${dwarf.name}</div>
                 <div class="popup-status">✅ Odkryto!</div>
                 <div class="popup-desc">${dwarf.description}</div>
                 <a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>
+                <a href="${googleMapsUrl}" target="_blank" class="popup-link navigate-link">📍 Prowadź</a>
             </div>` : 
             `<div class="map-popup">
                 <div class="popup-title">${dwarf.name}</div>
                 <div class="popup-status">❓ Nie odkryto</div>
                 <div class="popup-desc">Znajdź go i wprowadź kod magiczny!</div>
+                <a href="${googleMapsUrl}" target="_blank" class="popup-link navigate-link">📍 Prowadź</a>
             </div>`;
             
         const marker = L.marker(dwarf.location, { icon: dwarfIcon })
@@ -599,6 +603,7 @@ function updateMapMarkersWithCounters(counters) {
     dwarfData.forEach((dwarf, index) => {
         const code = dwarf.qrCode;
         const count = counters[code] || 0;
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${dwarf.location[0]},${dwarf.location[1]}`;
 
         const popupContent = dwarf.found
             ? `<div class="map-popup found">
@@ -607,12 +612,14 @@ function updateMapMarkersWithCounters(counters) {
                 <div class="popup-desc">${dwarf.description}</div>
                 <div class="popup-counter">Liczba odwiedzin: ${count}</div>
                 <a href="${getDwarfPageUrl(dwarf)}" class="popup-link">Zobacz szczegóły</a>
+                <a href="${googleMapsUrl}" target="_blank" class="popup-link navigate-link">📍 Prowadź</a>
             </div>`
             : `<div class="map-popup">
                 <div class="popup-title">${dwarf.name}</div>
                 <div class="popup-status">❓ Nie odkryto</div>
                 <div class="popup-desc">Znajdź go i wprowadź kod magiczny!</div>
                 <div class="popup-counter">Liczba odwiedzin: ${count}</div>
+                <a href="${googleMapsUrl}" target="_blank" class="popup-link navigate-link">📍 Prowadź</a>
             </div>`;
 
         markers[index].bindPopup(popupContent);
