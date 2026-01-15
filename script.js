@@ -40,6 +40,14 @@ const dwarfData = [
         description: "Przytulne miejsce pełne smaków i aromatów.",
         qrCode: "9331"
     },
+    {
+        id: 6,
+        name: "Stasiu od stawu",
+        location: [50.3404310, 19.5508079], // 50°20'09.3"N 19°33'43.2"E
+        found: false,
+        description: "Stasiu i staw.",
+        qrCode: ""
+    },
 ];
 
 // Save the dwarf data to local storage
